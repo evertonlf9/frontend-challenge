@@ -2,6 +2,9 @@
 
 Implementação do [desafio original](docs/CHALLENGE.md), preservando React/TypeScript, a stack obrigatória, as rotas e a identidade visual existentes. APIs, contas, carteiras, pagamentos e eventos são simulados na rede.
 
+## LINK
+https://frontend-challenge-olive-kappa.vercel.app/?view=all&sort=recent&page=1&pageSize=9
+
 ## Executar
 
 Requer Node.js >=24.8 e npm >=11.
