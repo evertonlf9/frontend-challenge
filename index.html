@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/roboto-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // The marketing artwork is public and static; discover it before app JS.
+      if (['/', '/login', '/register'].includes(location.pathname)) {
+        const image = document.createElement('link')
+        image.rel = 'preload'
+        image.as = 'image'
+        image.href = '/artwork/emerald.webp'
+        image.imageSrcset = '/artwork/emerald-240.webp 240w, /artwork/emerald-480.webp 480w, /artwork/emerald-640.webp 640w, /artwork/emerald-800.webp 800w, /artwork/emerald.webp 960w'
+        image.imageSizes = '(max-width: 767px) calc(100vw - 40px), 405px'
+        image.fetchPriority = 'high'
+        document.head.append(image)
+      }
+    </script>
+    <meta name="description" content="Descubra arte digital, explore coleções de NFTs e experimente a compra simulada no marketplace Kurio." />
+    <title>Kurio — Marketplace de NFTs</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
