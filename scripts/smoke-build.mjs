@@ -47,7 +47,6 @@ export async function verifyBuild(port = 4176) {
     await expect(page.getByRole('heading', { name: 'Compra confirmada' })).toBeVisible()
     await page.reload()
     await expect(page.getByRole('heading', { name: 'Compra confirmada' })).toBeVisible()
-    await page.evaluate(() => localStorage.setItem('kurio.accessibility.reading-mode', 'true'))
     await page.goto(`http://localhost:${port}/nft/nft-002`)
     await expect(page.locator('main h1')).toBeVisible()
     await expect(page.locator('main h1')).toHaveAttribute('data-reading-focus', '')

@@ -68,7 +68,7 @@ test('ações auxiliares explicam a integração e o teclado permanece no modal 
   await expect(dialog.getByRole('status').filter({ hasText: 'integração com Google' })).toBeVisible()
   await page.getByRole('button', { name: 'Continuar com Facebook' }).click()
   await expect(dialog.getByRole('status').filter({ hasText: 'integração com Facebook' })).toBeVisible()
-  const last = dialog.getByRole('button', { name: /^Leitura por Tab/ })
+  const last = dialog.locator('[data-reading-focus]:visible, a[href]:visible, button:enabled:visible, input:enabled:visible').last()
   await last.focus()
   await page.keyboard.press('Tab')
   await expect(page.getByRole('button', { name: 'Fechar autenticação' })).toBeFocused()

@@ -19,8 +19,15 @@ function isUsable(candidate: unknown): candidate is MockState {
     return false
   }
   const value = candidate as Partial<MockState>
-  return typeof value.revision === 'number' && Array.isArray(value.nfts) && Array.isArray(value.users)
-    && !!value.quotes && !!value.idempotency && !!value.sessions && !!value.carts
+  return (
+    typeof value.revision === 'number' &&
+    Array.isArray(value.nfts) &&
+    Array.isArray(value.users) &&
+    !!value.quotes &&
+    !!value.idempotency &&
+    !!value.sessions &&
+    !!value.carts
+  )
 }
 
 function readFromStorage(): MockState {
@@ -35,10 +42,19 @@ function readFromStorage(): MockState {
     }
     const parsed: unknown = JSON.parse(raw)
     if (!isUsable(parsed)) return createSeedState()
-    const assets = ["emerald", "sage", "neon", "sage", "sage", "neon", "golden", "golden", "golden"]
+    const assets = ['emerald', 'sage', 'neon', 'sage', 'sage', 'neon', 'golden', 'golden', 'golden']
     for (const [index, nft] of parsed.nfts.entries()) {
-      if (nft.imageUrl.startsWith("/artwork/") && nft.imageUrl.endsWith(".png")) { nft.imageUrl = nft.imageUrl.replace(".png", ".webp"); nft.galleryUrls = nft.galleryUrls.map((url) => url.replace(".png", ".webp")) }
-      if (nft.imageUrl.includes("art-") || nft.imageUrl.includes("coresg-normal")) { nft.imageUrl = "/artwork/" + assets[index % assets.length] + ".webp"; nft.galleryUrls = [nft.imageUrl, ...["emerald", "sage", "neon"].map((name) => "/artwork/" + name + ".webp")] }
+      if (nft.imageUrl.startsWith('/artwork/') && nft.imageUrl.endsWith('.png')) {
+        nft.imageUrl = nft.imageUrl.replace('.png', '.webp')
+        nft.galleryUrls = nft.galleryUrls.map((url) => url.replace('.png', '.webp'))
+      }
+      if (nft.imageUrl.includes('art-') || nft.imageUrl.includes('coresg-normal')) {
+        nft.imageUrl = '/artwork/' + assets[index % assets.length] + '.webp'
+        nft.galleryUrls = [
+          nft.imageUrl,
+          ...['emerald', 'sage', 'neon'].map((name) => '/artwork/' + name + '.webp'),
+        ]
+      }
       nft.popularity ??= (index * 37 + 31) % 100
     }
     return parsed
@@ -88,8 +104,16 @@ export function resetState(): MockState {
   state = createSeedState()
   state.scenario = DEFAULT_SCENARIO
   const local = storage()
-  if (local) for (const key of Object.keys(local)) if (key.startsWith("kurio.order.attempt:") || key === "kurio.cart.coupon") local.removeItem(key)
-  try { for (const key of Object.keys(window.sessionStorage)) if (key.startsWith("kurio.checkout.draft:")) window.sessionStorage.removeItem(key) } catch { /* Storage indisponível. */ }
+  if (local)
+    for (const key of Object.keys(local))
+      if (key.startsWith('kurio.order.attempt:') || key === 'kurio.cart.coupon')
+        local.removeItem(key)
+  try {
+    for (const key of Object.keys(window.sessionStorage))
+      if (key.startsWith('kurio.checkout.draft:')) window.sessionStorage.removeItem(key)
+  } catch {
+    /* Storage indisponível. */
+  }
   persist()
   return state
 }

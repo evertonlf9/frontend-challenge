@@ -62,7 +62,9 @@ export function formatEth(value: string, maximumFractionDigits = 4): string {
   const absolute = negative ? -scaled : scaled
   const whole = (absolute / SCALE).toString()
   const fraction = (absolute % SCALE).toString().padStart(SCALE_DIGITS, '0')
-  const trimmed = fraction.slice(0, Math.max(0, Math.min(SCALE_DIGITS, maximumFractionDigits))).replace(/0+$/, '')
+  const trimmed = fraction
+    .slice(0, Math.max(0, Math.min(SCALE_DIGITS, maximumFractionDigits)))
+    .replace(/0+$/, '')
   const value_ = trimmed ? `${whole},${trimmed}` : whole
   return negative ? `-${value_}` : value_
 }

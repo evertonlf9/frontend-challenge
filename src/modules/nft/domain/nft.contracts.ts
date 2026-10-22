@@ -49,7 +49,7 @@ export type NftSortField = (typeof NFT_SORT_FIELDS)[number]
 
 /** Parâmetros de listagem: espelham a query string da URL. */
 export interface NftListParams {
-  view?: "all" | "new" | "trending"
+  view?: 'all' | 'new' | 'trending'
   search?: string
   collection?: string
   network?: NetworkId

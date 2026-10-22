@@ -13,18 +13,33 @@ const connection = ws.link(socketUrl.toString())
 export const socketHandlers = [
   connection.addEventListener('connection', (connection) => {
     const io = toSocketIo(connection)
-    const removeControl = socketControls.subscribe(() => connection.client.close(1012, "Interrupção simulada"))
-    connection.client.addEventListener("close", removeControl)
+    const removeControl = socketControls.subscribe(() =>
+      connection.client.close(1012, 'Interrupção simulada')
+    )
+    connection.client.addEventListener('close', removeControl)
     let userId: string | null = null
     let subscriptionToken: string | null = null
     io.client.on('session.subscribe', (_event, token: string) => {
-      try { userId = mockApi.accounts.authenticate(token).user.id; subscriptionToken = token } catch { userId = null; subscriptionToken = null }
+      try {
+        userId = mockApi.accounts.authenticate(token).user.id
+        subscriptionToken = token
+      } catch {
+        userId = null
+        subscriptionToken = null
+      }
     })
     const unsubscribe = mockEvents.subscribe((event) => {
       if (event.type === 'order.updated' && subscriptionToken) {
-        try { mockApi.accounts.authenticate(subscriptionToken) } catch { return }
+        try {
+          mockApi.accounts.authenticate(subscriptionToken)
+        } catch {
+          return
+        }
       }
-      if (event.type === 'nft.updated' || (event.type === 'order.updated' && event.userId === userId)) {
+      if (
+        event.type === 'nft.updated' ||
+        (event.type === 'order.updated' && event.userId === userId)
+      ) {
         io.client.emit(event.type, event)
       }
     })

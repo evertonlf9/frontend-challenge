@@ -1,14 +1,17 @@
-import React from 'react';
-import { Link } from '@tanstack/react-router';
-import { ChevronRight } from 'lucide-react';
+import React from 'react'
+import { Link } from '@tanstack/react-router'
+import { ChevronRight } from 'lucide-react'
 
 interface BreadcrumbsProps {
-  items: { label: string; to?: string }[];
+  items: { label: string; to?: string }[]
 }
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
   return (
-    <nav aria-label="Trilha de navegação" className="page-breadcrumbs flex items-center gap-2 text-sm text-muted-foreground mb-6">
+    <nav
+      aria-label="Trilha de navegação"
+      className="page-breadcrumbs flex items-center gap-2 text-sm text-muted-foreground mb-6"
+    >
       {items.map((item, index) => (
         <React.Fragment key={index}>
           {item.to ? (
@@ -22,5 +25,5 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
         </React.Fragment>
       ))}
     </nav>
-  );
-};
+  )
+}

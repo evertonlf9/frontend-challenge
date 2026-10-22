@@ -1,47 +1,105 @@
-.skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; transform: translateY(-180%); padding: 10px 16px; background: var(--primary); color: var(--background); border: 2px solid var(--foreground); border-radius: 4px; font-weight: 700; }
-.skip-link:focus { transform: none; }
-.accessibility-menu { position: fixed; right: 16px; bottom: 16px; z-index: 60; }
-.accessibility-menu > summary { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 22px; background: var(--card); color: var(--foreground); font-size: 11px; cursor: pointer; box-shadow: 0 3px 14px #0004; list-style: none; }
-.accessibility-menu > summary::-webkit-details-marker { display: none; }
-.accessibility-panel { position: absolute; right: 0; bottom: 50px; width: min(320px, calc(100vw - 32px)); max-height: calc(100svh - 82px); overflow-y: auto; overscroll-behavior: contain; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 40px #0009; }
-.accessibility-panel > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-.accessibility-panel h2 { font-size: 16px; line-height: 22px; }
-.accessibility-panel > div > button { width: 28px; height: 28px; display: grid; place-items: center; }
-.accessibility-panel p { margin-top: 12px; font-size: 12px; line-height: 21px; color: var(--muted-foreground); }
-.reading-mode-control { display: inline-block; }
-.reading-mode-control > button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 11px; color: var(--muted-foreground); background: var(--background); }
-.reading-mode-control > button[aria-pressed="true"] { border-color: var(--primary); color: var(--foreground); }
-.dialog-reading-controls { display: flex; justify-content: end; padding-top: 16px; margin-top: 20px; border-top: 1px solid var(--border); }
-.auth-modal > .dialog-reading-controls { width: min(385px, calc(100% - 48px)); margin: 24px auto 0; }
-.receipt-modal > .dialog-reading-controls { margin: 0; padding: 12px 24px; }
-[data-reading-focus]:focus-visible { outline: 3px solid #ffd089; outline-offset: 4px; border-radius: 3px; box-shadow: 0 0 0 6px var(--background); scroll-margin-block: 28px; }
-img[data-reading-focus]:focus-visible { outline-offset: -4px; }
-.collector-note { display: grid; align-content: start; gap: 7px; }
-/* Keep the small dot artwork while exposing a usable pointer target. */
-.hero-dots button { display: grid; place-items: center; width: 24px; height: 24px; background: transparent; }
-.hero-dots button::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #ad6f39; }
-.hero-dots button[aria-pressed=true] { background: transparent; }
-.hero-dots button[aria-pressed=true]::before { background: #edaa60; }
-.quantity-control button, .quantity-control input { min-width: 24px; min-height: 28px; }
-.quantity-control button:disabled { opacity: .5; cursor: default; }
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  transform: translateY(-180%);
+  padding: 10px 16px;
+  background: var(--primary);
+  color: var(--background);
+  border: 2px solid var(--foreground);
+  border-radius: 4px;
+  font-weight: 700;
+}
+.skip-link:focus {
+  transform: none;
+}
+[data-reading-focus]:focus-visible {
+  outline: 3px solid #ffd089;
+  outline-offset: 4px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 6px var(--background);
+  scroll-margin-block: 28px;
+}
+img[data-reading-focus]:focus-visible {
+  outline-offset: -4px;
+}
+.collector-note {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+/* Mantém os pontos pequenos, com uma área de clique maior. */
+.hero-dots button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+}
+.hero-dots button::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ad6f39;
+}
+.hero-dots button[aria-pressed='true'] {
+  background: transparent;
+}
+.hero-dots button[aria-pressed='true']::before {
+  background: #edaa60;
+}
+.quantity-control button,
+.quantity-control input {
+  min-width: 24px;
+  min-height: 28px;
+}
+.quantity-control button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 @media (pointer: coarse) {
-  .quantity-control button, .quantity-control input { min-width: 40px; min-height: 44px; }
-  .detail-purchase-options { grid-template-columns: minmax(0, 1fr) 140px; }
-  .icon-button, .auth-close { min-width: 44px; min-height: 44px; }
+  .quantity-control button,
+  .quantity-control input {
+    min-width: 40px;
+    min-height: 44px;
+  }
+  .detail-purchase-options {
+    grid-template-columns: minmax(0, 1fr) 140px;
+  }
+  .icon-button,
+  .auth-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 @media (max-width: 600px) {
-  .accessibility-menu > summary { width: 40px; height: 40px; padding: 8px; }
-  .accessibility-menu > summary > span { display: none; }
-  .app-shell:is([data-page="/cart"], [data-page="/checkout"]) > .accessibility-menu { top: 14px; right: 14px; bottom: auto; }
-  .app-shell:is([data-page="/cart"], [data-page="/checkout"]) .accessibility-panel { top: 50px; bottom: auto; }
-  .flow-heading .page-title { max-width: calc(100% - 96px); text-align: center; }
-  .dialog-reading-controls { margin-top: 18px; }
+  .flow-heading .page-title {
+    max-width: calc(100% - 96px);
+    text-align: center;
+  }
+}
+@media (max-width: 360px) {
+  .filter-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 @media (prefers-contrast: more) {
-  :root { --foreground: #fff; --muted-foreground: #f5d6ac; --border: #ba8a63; }
-  input::placeholder, textarea::placeholder { color: #f5d6ac !important; }
+  :root {
+    --foreground: #fff;
+    --muted-foreground: #f5d6ac;
+    --border: #ba8a63;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #f5d6ac !important;
+  }
 }
 @media (forced-colors: active) {
-  :focus-visible, [data-reading-focus]:focus-visible { outline: 3px solid Highlight; box-shadow: none; }
-  .reading-mode-control > button[aria-pressed="true"] { border: 3px solid Highlight; }
+  :focus-visible,
+  [data-reading-focus]:focus-visible {
+    outline: 3px solid Highlight;
+    box-shadow: none;
+  }
 }

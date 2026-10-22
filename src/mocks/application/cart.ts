@@ -7,7 +7,20 @@ export function createCart(store: MockStore) {
   const get = (owner: string): Cart => ({
     items: (store.read().carts[owner] ?? []).flatMap((line) => {
       const nft = store.read().nfts.find((item) => item.id === line.nftId)
-      return nft ? [{ nftId: nft.id, name: nft.name, imageUrl: nft.imageUrl, network: nft.network, unitPriceEth: nft.priceEth, quantity: line.quantity, available: nft.available, maxPerOrder: nft.maxPerOrder }] : []
+      return nft
+        ? [
+            {
+              nftId: nft.id,
+              name: nft.name,
+              imageUrl: nft.imageUrl,
+              network: nft.network,
+              unitPriceEth: nft.priceEth,
+              quantity: line.quantity,
+              available: nft.available,
+              maxPerOrder: nft.maxPerOrder,
+            },
+          ]
+        : []
     }),
     itemCount: (store.read().carts[owner] ?? []).reduce((sum, item) => sum + item.quantity, 0),
     updatedAt: new Date(store.now()).toISOString(),
@@ -23,19 +36,34 @@ export function createCart(store: MockStore) {
       const previous = (store.read().carts[owner] ?? []).find((item) => item.nftId === id)
       if (nftId && !previous) fail('NOT_FOUND', 404)
       const requested = nftId ? count : count + (previous?.quantity ?? 0)
-      if (requested > nft.available || requested > nft.maxPerOrder || store.read().scenario === 'availability-conflict') fail('AVAILABILITY_CONFLICT', 409)
-      store.transaction((state) => { state.carts[owner] = (state.carts[owner] ?? []).filter((item) => item.nftId !== id).concat({ nftId: id, quantity: requested }) })
+      if (
+        requested > nft.available ||
+        requested > nft.maxPerOrder ||
+        store.read().scenario === 'availability-conflict'
+      )
+        fail('AVAILABILITY_CONFLICT', 409)
+      store.transaction((state) => {
+        state.carts[owner] = (state.carts[owner] ?? [])
+          .filter((item) => item.nftId !== id)
+          .concat({ nftId: id, quantity: requested })
+      })
       return get(owner)
     },
     remove(owner: string, id: string) {
-      store.transaction((state) => { state.carts[owner] = (state.carts[owner] ?? []).filter((item) => item.nftId !== id) })
+      store.transaction((state) => {
+        state.carts[owner] = (state.carts[owner] ?? []).filter((item) => item.nftId !== id)
+      })
       return get(owner)
     },
   }
 }
 
 export function createFavorites(store: MockStore) {
-  const get = (owner: string): FavoritesResponse => ({ items: structuredClone(store.read().nfts.filter((nft) => (store.read().favorites[owner] ?? []).includes(nft.id))) })
+  const get = (owner: string): FavoritesResponse => ({
+    items: structuredClone(
+      store.read().nfts.filter((nft) => (store.read().favorites[owner] ?? []).includes(nft.id))
+    ),
+  })
   return {
     get,
     set(owner: string, id: string, selected: boolean) {

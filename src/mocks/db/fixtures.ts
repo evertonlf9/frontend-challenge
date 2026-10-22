@@ -25,9 +25,58 @@ export const COLLECTIONS = [
 
 const NETWORKS: readonly NetworkId[] = ['ethereum', 'polygon', 'solana']
 const RARITIES = ['Comum', 'Incomum', 'Raro', 'Épico', 'Lendário'] as const
-const TRAITS = ['Óculos', 'Esmeralda', 'Raro', 'Chapéu', 'Sobretudo', 'Neon', 'Coroa', 'Máscara', 'Asas', 'Cristal', 'Aurora', 'Som'] as const
-const PREFIXES = ['Emerald', 'Sage', 'Neon', 'Cosmic', 'Violet', 'Ivory', 'Golden', 'Crimson', 'Azure', 'Obsidian', 'Solar', 'Lunar', 'Frost', 'Amber', 'Jade', 'Onyx', 'Coral', 'Cobalt', 'Ember', 'Quartz', 'Opal', 'Slate'] as const
-const SUFFIXES = ['Ape', 'Nomad', 'Vessel', 'Bloom', 'Baron', 'Signal', 'Beat', 'Drifter', 'Keeper', 'Oracle', 'Wanderer', 'Sentinel'] as const
+const TRAITS = [
+  'Óculos',
+  'Esmeralda',
+  'Raro',
+  'Chapéu',
+  'Sobretudo',
+  'Neon',
+  'Coroa',
+  'Máscara',
+  'Asas',
+  'Cristal',
+  'Aurora',
+  'Som',
+] as const
+const PREFIXES = [
+  'Emerald',
+  'Sage',
+  'Neon',
+  'Cosmic',
+  'Violet',
+  'Ivory',
+  'Golden',
+  'Crimson',
+  'Azure',
+  'Obsidian',
+  'Solar',
+  'Lunar',
+  'Frost',
+  'Amber',
+  'Jade',
+  'Onyx',
+  'Coral',
+  'Cobalt',
+  'Ember',
+  'Quartz',
+  'Opal',
+  'Slate',
+] as const
+const SUFFIXES = [
+  'Ape',
+  'Nomad',
+  'Vessel',
+  'Bloom',
+  'Baron',
+  'Signal',
+  'Beat',
+  'Drifter',
+  'Keeper',
+  'Oracle',
+  'Wanderer',
+  'Sentinel',
+] as const
 const CREATORS = ['alex_creative', 'mira.studio', 'nando.eth', 'labs.kurio'] as const
 
 const IMAGE_PROMPTS = [
@@ -70,7 +119,7 @@ function roundPrice(value: number): string {
 function imageUrl(prompt: string, _size: string): string {
   let value = 0
   for (const character of prompt) value = (value + character.charCodeAt(0)) % 8
-  return "/artwork/" + ["emerald", "sage", "neon", "golden"][value % 4] + ".webp"
+  return '/artwork/' + ['emerald', 'sage', 'neon', 'golden'][value % 4] + '.webp'
 }
 
 function buildNfts(): Nft[] {
@@ -82,7 +131,12 @@ function buildNfts(): Nft[] {
     const hasPromotion = index % 5 === 0
     const previousPrice = hasPromotion ? roundPrice(Number(price) * 1.18) : null
     const availabilityRoll = random()
-    const available = index === 0 ? 20 : availabilityRoll < 0.12 ? 0 : Math.max(1, Math.floor(availabilityRoll * 12))
+    const available =
+      index === 0
+        ? 20
+        : availabilityRoll < 0.12
+          ? 0
+          : Math.max(1, Math.floor(availabilityRoll * 12))
     const collection = COLLECTIONS[index % COLLECTIONS.length] as string
     const network = NETWORKS[index % NETWORKS.length] as NetworkId
     const tokenNumber = String(index + 1).padStart(3, '0')
@@ -90,25 +144,26 @@ function buildNfts(): Nft[] {
     const updatedAt = new Date(BASE_DATE - index * 37 * 60_000).toISOString()
 
     const reference = [
-      { name: "Emerald Ape #042", price: "1.19", image: "emerald" },
-      { name: "Sage Nomad #009", price: "1.69", image: "sage" },
-      { name: "Neon Vessel #552", price: "1.99", image: "neon" },
-      { name: "Cosmic Bloom #118", price: "1.29", image: "sage" },
-      { name: "Violet Nomad #314", price: "1.39", image: "sage" },
-      { name: "Ivory Baron #088", price: "1.79", image: "neon" },
-      { name: "Golden Beat #207", price: "0.99", image: "golden" },
-      { name: "Golden Keeper #091", price: "0.59", image: "golden" },
-      { name: "Golden Signal #160", price: "0.39", image: "golden" },
+      { name: 'Emerald Ape #042', price: '1.19', image: 'emerald' },
+      { name: 'Sage Nomad #009', price: '1.69', image: 'sage' },
+      { name: 'Neon Vessel #552', price: '1.99', image: 'neon' },
+      { name: 'Cosmic Bloom #118', price: '1.29', image: 'sage' },
+      { name: 'Violet Nomad #314', price: '1.39', image: 'sage' },
+      { name: 'Ivory Baron #088', price: '1.79', image: 'neon' },
+      { name: 'Golden Beat #207', price: '0.99', image: 'golden' },
+      { name: 'Golden Keeper #091', price: '0.59', image: 'golden' },
+      { name: 'Golden Signal #160', price: '0.39', image: 'golden' },
     ][index]
     return {
       id: `nft-${tokenNumber}`,
-      name: reference?.name ?? `${pick(PREFIXES, random)} ${pick(SUFFIXES, random)} #${tokenNumber}`,
+      name:
+        reference?.name ?? `${pick(PREFIXES, random)} ${pick(SUFFIXES, random)} #${tokenNumber}`,
       description:
         'Obra digital certificada da coleção Kurio Editions, com procedência registrada e metadados no IPFS.',
       collection,
       network,
       priceEth: reference?.price ?? price,
-      previousPriceEth: reference ? (index === 2 ? "2.29" : null) : previousPrice,
+      previousPriceEth: reference ? (index === 2 ? '2.29' : null) : previousPrice,
       available,
       maxPerOrder: Math.min(5, Math.max(1, available)),
       popularity: (index * 37 + 31) % 100,
@@ -117,9 +172,11 @@ function buildNfts(): Nft[] {
         trait: ['Cor', 'Acessório', 'Estilo'][attributeIndex] as string,
         value: pick(TRAITS, random),
       })),
-      imageUrl: reference ? "/artwork/" + reference.image + ".webp" : imageUrl(primaryPrompt, 'square_hd'),
+      imageUrl: reference
+        ? '/artwork/' + reference.image + '.webp'
+        : imageUrl(primaryPrompt, 'square_hd'),
       galleryUrls: [
-        reference ? "/artwork/" + reference.image + ".webp" : imageUrl(primaryPrompt, 'square_hd'),
+        reference ? '/artwork/' + reference.image + '.webp' : imageUrl(primaryPrompt, 'square_hd'),
         imageUrl(pick(IMAGE_PROMPTS, random), 'square'),
         imageUrl(pick(IMAGE_PROMPTS, random), 'square'),
         imageUrl(pick(IMAGE_PROMPTS, random), 'square'),
@@ -140,7 +197,11 @@ function buildNfts(): Nft[] {
   })
 }
 
-function buildUsers(): { users: MockUser[]; profiles: Record<string, Profile>; wallets: Record<string, Wallet[]> } {
+function buildUsers(): {
+  users: MockUser[]
+  profiles: Record<string, Profile>
+  wallets: Record<string, Wallet[]>
+} {
   const seedDate = new Date(BASE_DATE - 400 * 24 * 60 * 60_000).toISOString()
   const users: MockUser[] = [
     {

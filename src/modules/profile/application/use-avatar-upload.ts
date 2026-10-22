@@ -3,10 +3,18 @@ import { useResourceMutation } from '@/modules/shared/application/use-resource-m
 import type { UpdateProfileInput } from '../domain/profile.contracts'
 
 export function useAvatarUpload() {
-  const update = useResourceMutation((api, context, input: UpdateProfileInput) => api.profile.update(input, context), ['profile'])
+  const update = useResourceMutation(
+    (api, context, input: UpdateProfileInput) => api.profile.update(input, context),
+    ['profile']
+  )
   const [fileError, setFileError] = useState('')
   const reader = useRef<FileReader | null>(null)
-  useEffect(() => () => { reader.current?.abort() }, [])
+  useEffect(
+    () => () => {
+      reader.current?.abort()
+    },
+    []
+  )
   function upload(file?: File) {
     if (!file) return
     reader.current?.abort()
@@ -24,11 +32,25 @@ export function useAvatarUpload() {
   function setUrl(value: string) {
     try {
       const url = new URL(value.trim())
-      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('Invalid URL')
+      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password)
+        throw new Error('Invalid URL')
       setFileError('')
       reader.current?.abort()
       update.mutate({ avatarUrl: url.href })
-    } catch { setFileError('Informe uma URL HTTP ou HTTPS válida, sem credenciais.') }
+    } catch {
+      setFileError('Informe uma URL HTTP ou HTTPS válida, sem credenciais.')
+    }
   }
-  return { upload, setUrl, remove: () => { reader.current?.abort(); setFileError(''); update.mutate({ avatarUrl: '' }) }, pending: update.isPending, error: update.error, fileError }
+  return {
+    upload,
+    setUrl,
+    remove: () => {
+      reader.current?.abort()
+      setFileError('')
+      update.mutate({ avatarUrl: '' })
+    },
+    pending: update.isPending,
+    error: update.error,
+    fileError,
+  }
 }

@@ -22,13 +22,22 @@ export function useAuthForm(mode: 'login' | 'register') {
       return
     }
     setConfirmationError(null)
-    mutation.mutate({ name: input.name.trim(), email: input.email.trim(), password: input.password }, {
-      onSuccess: async () => {
-        await router.invalidate()
-        await router.navigate({ href: search.redirect ?? '/profile' })
-      },
-    })
+    mutation.mutate(
+      { name: input.name.trim(), email: input.email.trim(), password: input.password },
+      {
+        onSuccess: async () => {
+          await router.invalidate()
+          await router.navigate({ href: search.redirect ?? '/profile' })
+        },
+      }
+    )
   }
 
-  return { submit, pending: mutation.isPending, error: mutation.error, confirmationError, clearConfirmationError: () => setConfirmationError(null) }
+  return {
+    submit,
+    pending: mutation.isPending,
+    error: mutation.error,
+    confirmationError,
+    clearConfirmationError: () => setConfirmationError(null),
+  }
 }

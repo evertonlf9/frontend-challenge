@@ -6,7 +6,6 @@ import type { Coupon } from '@/modules/checkout/domain/quote.contracts'
 import type { Quote } from '@/modules/checkout/domain/quote.contracts'
 import type { MockScenarioId } from '../scenarios'
 
-
 export interface MockUser {
   id: string
   name: string
@@ -21,7 +20,6 @@ export interface MockSession {
   expiresAt: string
 }
 
-
 export interface MockIdempotencyRecord {
   fingerprint: string
   orderId: string
@@ -32,7 +30,6 @@ export interface MockCartLine {
   nftId: string
   quantity: number
 }
-
 
 export interface MockState {
   revision: number

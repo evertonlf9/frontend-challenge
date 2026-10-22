@@ -7,7 +7,11 @@ let flakyCounter = 0
 let catalogCounter = 0
 
 let latencyCounter = 0
-export function resetLatency() { flakyCounter = 0; catalogCounter = 0; latencyCounter = 0 }
+export function resetLatency() {
+  flakyCounter = 0
+  catalogCounter = 0
+  latencyCounter = 0
+}
 
 /**
  * Aplica os efeitos globais do cenário ativo.
@@ -37,7 +41,10 @@ export async function applyScenarioEffects(): Promise<Response | null> {
 /** Aplica a latência do cenário ativo somada a um valor opcional. */
 export async function applyLatency(extraMs = 0): Promise<void> {
   const scenario = getScenarioDefinition(getActiveScenario())
-  const base = scenario.latencyMs ? scenario.latencyMs[0] + ((latencyCounter++ % 5) / 4) * (scenario.latencyMs[1] - scenario.latencyMs[0]) : 0
+  const base = scenario.latencyMs
+    ? scenario.latencyMs[0] +
+      ((latencyCounter++ % 5) / 4) * (scenario.latencyMs[1] - scenario.latencyMs[0])
+    : 0
   const total = base + extraMs
   if (total > 0) {
     await delay(total)

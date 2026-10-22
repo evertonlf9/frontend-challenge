@@ -6,8 +6,15 @@ const TOKEN_KEY = 'kurio.session.token'
 
 let memoryToken: string | null = null
 const listeners = new Set<() => void>()
-export function subscribeSession(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener) } }
-function notify() { for (const listener of listeners) listener() }
+export function subscribeSession(listener: () => void) {
+  listeners.add(listener)
+  return () => {
+    listeners.delete(listener)
+  }
+}
+function notify() {
+  for (const listener of listeners) listener()
+}
 
 function safeStorage(): Storage | null {
   try {
@@ -55,7 +62,9 @@ export function getGuestCartId(): string {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('storage', (event) => { if (event.key === TOKEN_KEY) notify() })
+  window.addEventListener('storage', (event) => {
+    if (event.key === TOKEN_KEY) notify()
+  })
 }
 
 export function clearSessionToken(): void {

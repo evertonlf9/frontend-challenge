@@ -6,7 +6,7 @@ export function errorResponse(
   status: number,
   code: ApiErrorCode,
   message?: string,
-  details?: ApiFieldIssue[],
+  details?: ApiFieldIssue[]
 ): Response {
   return HttpResponse.json({ error: { code, message, details } }, { status })
 }

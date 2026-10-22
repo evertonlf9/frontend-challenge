@@ -10,9 +10,17 @@ export function ProfilePage() {
   const { queries } = useMarketplace()
   const profile = useQuery(queries.profile())
   const favorites = useRouterState({ select: (state) => state.location.hash === 'favoritos' })
-  return <AccountLayout>{favorites ? <ProfileFavorites /> : <>
-    <h1>Perfil do colecionador</h1>
-    <QueryFeedback query={profile} />
-    {profile.data && <ProfileEditor key={profile.data.id} profile={profile.data} />}
-  </>}</AccountLayout>
+  return (
+    <AccountLayout>
+      {favorites ? (
+        <ProfileFavorites />
+      ) : (
+        <>
+          <h1>Perfil do colecionador</h1>
+          <QueryFeedback query={profile} />
+          {profile.data && <ProfileEditor key={profile.data.id} profile={profile.data} />}
+        </>
+      )}
+    </AccountLayout>
+  )
 }

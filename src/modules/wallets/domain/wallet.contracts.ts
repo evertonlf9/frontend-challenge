@@ -22,7 +22,9 @@ export interface Wallet extends WalletDetails {
   createdAt: string
   updatedAt: string
 }
-export interface WalletListResponse { items: Wallet[] }
+export interface WalletListResponse {
+  items: Wallet[]
+}
 export interface CreateWalletInput extends WalletDetails {
   label: string
   address: string

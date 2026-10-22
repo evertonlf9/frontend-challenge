@@ -56,11 +56,33 @@ export interface ScenarioDefinition {
 }
 
 const DEFINITIONS: Record<MockScenarioId, ScenarioDefinition> = {
-  'invalid-catalog-response': { id: 'invalid-catalog-response', label: 'Contrato de catálogo inválido', description: 'A listagem devolve preço numérico para exercitar a validação do cliente.' },
-  'invalid-order-response': { id: 'invalid-order-response', label: 'Resposta inválida após compra', description: 'Persiste o pedido, mas devolve total inválido na primeira resposta; replay recupera o resultado correto.' },
-  'wallet-refused': { id: 'wallet-refused', label: 'Conexão recusada', description: 'A carteira recusa a simulação de conexão.' },
-  'favorite-error': { id: 'favorite-error', label: 'Falha em favoritos', description: 'Leituras funcionam; mutations de favoritos retornam 503 para exercitar rollback.', latencyMs: [600, 600] },
-  'payment-pending': { id: 'payment-pending', label: 'Pedido pendente', description: 'Mantém o pedido pendente até encerramento pelo endpoint de controle.' },
+  'invalid-catalog-response': {
+    id: 'invalid-catalog-response',
+    label: 'Contrato de catálogo inválido',
+    description: 'A listagem devolve preço numérico para exercitar a validação do cliente.',
+  },
+  'invalid-order-response': {
+    id: 'invalid-order-response',
+    label: 'Resposta inválida após compra',
+    description:
+      'Persiste o pedido, mas devolve total inválido na primeira resposta; replay recupera o resultado correto.',
+  },
+  'wallet-refused': {
+    id: 'wallet-refused',
+    label: 'Conexão recusada',
+    description: 'A carteira recusa a simulação de conexão.',
+  },
+  'favorite-error': {
+    id: 'favorite-error',
+    label: 'Falha em favoritos',
+    description: 'Leituras funcionam; mutations de favoritos retornam 503 para exercitar rollback.',
+    latencyMs: [600, 600],
+  },
+  'payment-pending': {
+    id: 'payment-pending',
+    label: 'Pedido pendente',
+    description: 'Mantém o pedido pendente até encerramento pelo endpoint de controle.',
+  },
   default: {
     id: 'default',
     label: 'Padrão',
@@ -100,7 +122,8 @@ const DEFINITIONS: Record<MockScenarioId, ScenarioDefinition> = {
   'out-of-order': {
     id: 'out-of-order',
     label: 'Respostas fora de ordem',
-    description: 'A listagem responde com atraso variável, exercitando descarte de respostas obsoletas.',
+    description:
+      'A listagem responde com atraso variável, exercitando descarte de respostas obsoletas.',
     outOfOrder: true,
   },
   'session-expired': {
@@ -130,7 +153,8 @@ const DEFINITIONS: Record<MockScenarioId, ScenarioDefinition> = {
   'order-timeout': {
     id: 'order-timeout',
     label: 'Timeout no pedido',
-    description: 'A primeira criação persiste o pedido e estoura timeout; reenviar com a mesma chave recupera o pedido.',
+    description:
+      'A primeira criação persiste o pedido e estoura timeout; reenviar com a mesma chave recupera o pedido.',
     orderTimeout: true,
   },
 }
@@ -143,4 +167,5 @@ export function getScenarioDefinition(id: MockScenarioId): ScenarioDefinition {
   return DEFINITIONS[id] ?? DEFINITIONS.default
 }
 
-export const SCENARIO_CATALOG: readonly ScenarioDefinition[] = MOCK_SCENARIOS.map(getScenarioDefinition)
+export const SCENARIO_CATALOG: readonly ScenarioDefinition[] =
+  MOCK_SCENARIOS.map(getScenarioDefinition)

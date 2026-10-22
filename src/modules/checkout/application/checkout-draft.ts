@@ -10,8 +10,14 @@ export function readCheckoutDraft(owner?: string): Record<string, string> {
   try {
     const saved: unknown = JSON.parse(sessionStorage.getItem(draftKey(owner)) ?? '{}')
     if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {}
-    return Object.fromEntries(Object.entries(saved).filter((entry): entry is [string, string] => typeof entry[1] === 'string'))
-  } catch { return {} }
+    return Object.fromEntries(
+      Object.entries(saved).filter(
+        (entry): entry is [string, string] => typeof entry[1] === 'string'
+      )
+    )
+  } catch {
+    return {}
+  }
 }
 export function saveCheckoutDraft(owner: string | undefined, values: CollectorDetails): void {
   if (!owner) return

@@ -66,7 +66,8 @@ const DEFAULT_MESSAGES: Record<ApiErrorCode, string> = {
   SERVICE_UNAVAILABLE: 'Serviço indisponível no momento.',
   GATEWAY_TIMEOUT: 'A operação demorou demais e foi interrompida.',
   NETWORK_ERROR: 'Falha de conexão com o servidor.',
-  INVALID_RESPONSE: 'O servidor retornou dados inválidos. Tente recuperar a operação antes de reenviá-la.',
+  INVALID_RESPONSE:
+    'O servidor retornou dados inválidos. Tente recuperar a operação antes de reenviá-la.',
   UNKNOWN: 'Ocorreu um erro inesperado.',
 }
 
@@ -76,7 +77,10 @@ export class ApiError extends Error {
   readonly status: number
   readonly details: ApiFieldIssue[]
 
-  constructor(payload: { code: ApiErrorCode; message?: string; details?: ApiFieldIssue[] }, status = 0) {
+  constructor(
+    payload: { code: ApiErrorCode; message?: string; details?: ApiFieldIssue[] },
+    status = 0
+  ) {
     super(payload.message ?? DEFAULT_MESSAGES[payload.code])
     this.name = 'ApiError'
     this.code = payload.code
@@ -108,11 +112,31 @@ export function parseApiError(error: unknown): ApiError {
   if (error && typeof error === 'object' && 'isAxiosError' in error) {
     const transport = error as { response?: { data?: unknown; status: number }; code?: string }
     const envelope = transport.response?.data
-    const payload = envelope && typeof envelope === 'object' && 'error' in envelope ? envelope.error : null
-    if (payload && typeof payload === 'object' && 'code' in payload && typeof payload.code === 'string' && (API_ERROR_CODES as readonly string[]).includes(payload.code)) {
-      const message = 'message' in payload && typeof payload.message === 'string' ? payload.message : undefined
-      const details = 'details' in payload && Array.isArray(payload.details) ? payload.details.filter((issue): issue is ApiFieldIssue => !!issue && typeof issue === 'object' && typeof issue.field === 'string' && typeof issue.message === 'string') : []
-      return new ApiError({ code: payload.code as ApiErrorCode, message, details }, transport.response?.status ?? 0)
+    const payload =
+      envelope && typeof envelope === 'object' && 'error' in envelope ? envelope.error : null
+    if (
+      payload &&
+      typeof payload === 'object' &&
+      'code' in payload &&
+      typeof payload.code === 'string' &&
+      (API_ERROR_CODES as readonly string[]).includes(payload.code)
+    ) {
+      const message =
+        'message' in payload && typeof payload.message === 'string' ? payload.message : undefined
+      const details =
+        'details' in payload && Array.isArray(payload.details)
+          ? payload.details.filter(
+              (issue): issue is ApiFieldIssue =>
+                !!issue &&
+                typeof issue === 'object' &&
+                typeof issue.field === 'string' &&
+                typeof issue.message === 'string'
+            )
+          : []
+      return new ApiError(
+        { code: payload.code as ApiErrorCode, message, details },
+        transport.response?.status ?? 0
+      )
     }
 
     if (transport.code === 'ECONNABORTED' || transport.code === 'ETIMEDOUT') {

@@ -16,16 +16,31 @@ export function useRouteFocus() {
       const main = document.getElementById('conteudo')
       const updateTitle = () => {
         const heading = document.querySelector<HTMLElement>('dialog[open] h1, main h1')
-        const title = location.pathname === '/login' ? 'Entrar' : location.pathname === '/register' ? 'Criar conta' : heading?.textContent?.trim()
+        const title =
+          location.pathname === '/login'
+            ? 'Entrar'
+            : location.pathname === '/register'
+              ? 'Criar conta'
+              : heading?.textContent?.trim()
         document.title = title ? `${title} — Kurio` : 'Kurio — Marketplace de NFTs'
         return heading
       }
       updateTitle()
       if (document.querySelector('dialog[open]')) return
-      const wasDialog = ['/login', '/register'].includes(old.pathname) || old.pathname.startsWith('/orders/')
-      if (wasDialog && document.activeElement !== document.body && document.activeElement?.isConnected) return
+      const wasDialog =
+        ['/login', '/register'].includes(old.pathname) || old.pathname.startsWith('/orders/')
+      if (
+        wasDialog &&
+        document.activeElement !== document.body &&
+        document.activeElement?.isConnected
+      )
+        return
       const section = changedSection ? document.getElementById(location.hash) : null
-      const target = section?.querySelector<HTMLElement>('h1,h2,h3') ?? section ?? main?.querySelector<HTMLElement>('h1') ?? main
+      const target =
+        section?.querySelector<HTMLElement>('h1,h2,h3') ??
+        section ??
+        main?.querySelector<HTMLElement>('h1') ??
+        main
       if (!target) return
       const focus = (element: HTMLElement) => {
         if (!element.hasAttribute('tabindex')) element.tabIndex = -1
@@ -38,12 +53,20 @@ export function useRouteFocus() {
         observer = new MutationObserver(() => {
           const heading = updateTitle()
           if (!heading) return
-          if (changedPage && document.activeElement === main && !document.querySelector('dialog[open]')) focus(heading)
+          if (
+            changedPage &&
+            document.activeElement === main &&
+            !document.querySelector('dialog[open]')
+          )
+            focus(heading)
           observer?.disconnect()
         })
         observer.observe(main, { childList: true, subtree: true })
       }
     })
-    return () => { cancelAnimationFrame(frame); observer?.disconnect() }
+    return () => {
+      cancelAnimationFrame(frame)
+      observer?.disconnect()
+    }
   }, [location.pathname, location.hash, status])
 }

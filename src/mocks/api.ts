@@ -19,11 +19,24 @@ export const mockApi = {
 
 export function publishOrder(order: Order) {
   const owner = getState().orderOwners[order.id]
-  mockEvents.publish({ id: `order:${order.id}:${order.version}`, type: 'order.updated', resourceId: order.id, userId: owner, version: order.version, data: order })
+  mockEvents.publish({
+    id: `order:${order.id}:${order.version}`,
+    type: 'order.updated',
+    resourceId: order.id,
+    userId: owner,
+    version: order.version,
+    data: order,
+  })
   if (order.status === 'confirmed') {
     for (const line of order.items) {
       const nft = mockApi.catalog.get(line.nftId)
-      mockEvents.publish({ id: `nft:${nft.id}:${nft.version}`, type: 'nft.updated', resourceId: nft.id, version: nft.version, data: nft })
+      mockEvents.publish({
+        id: `nft:${nft.id}:${nft.version}`,
+        type: 'nft.updated',
+        resourceId: nft.id,
+        version: nft.version,
+        data: nft,
+      })
     }
   }
 }
